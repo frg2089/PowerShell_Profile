@@ -1,0 +1,213 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "segments": [
+        {
+          "type": "time",
+          "style": "plain",
+          "foreground": "#00ff00",
+          "properties": {
+            "time_format": "[15:04:05]"
+          },
+          "template": "{{ .CurrentDate | date .Format }} "
+        },
+        {
+          "type": "session",
+          "style": "plain",
+          "foreground": "#c386f1",
+          "template": "{{ if .SSHSession }}󰣀{{ end }}{{ .UserName }}@{{ .HostName }} "
+        },
+        {
+          "type": "root",
+          "style": "plain",
+          "foreground": "#ffff66",
+          "template": " "
+        },
+        {
+          "type": "os",
+          "style": "plain",
+          "foreground": "#26C6DA",
+          "template": "{{ if .WSL }} in {{ end }}{{.Icon}} "
+        },
+        {
+          "type": "shell",
+          "style": "plain",
+          "foreground": "#0077c2",
+          "template": "{{ .Name }}{{ .Version }} ",
+          "properties": {
+            "mapped_shell_names": {
+              "pwsh": "󰨊",
+              "dotnet": "󰨊󰪮",
+              "powershell": "󰨊"
+            }
+          }
+        },
+        {
+          "type": "battery",
+          "style": "plain",
+          "foreground": "#ffeb3b",
+          "foreground_templates": [
+            "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}",
+            "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
+            "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
+          ],
+          "template": "{{ if not .Error }}{{ .Percentage }}{{ if eq .Percentage 100 }}󰁹{{ else if ge .Percentage 90 }}󰂂{{ else if ge .Percentage 80 }}󰂁{{ else if ge .Percentage 70 }}󰂀{{ else if ge .Percentage 60 }}󰁿{{ else if ge .Percentage 50 }}󰁾{{ else if ge .Percentage 40 }}󰁽{{ else if ge .Percentage 30 }}󰁼{{ else if ge .Percentage 20 }}󰁻{{ else if ge .Percentage 10 }}󰁺{{ else if ge .Percentage 5 }}󰂎{{ else if ge .Percentage 0 }}󰂎{{ end }}{{ .Icon }}{{ end }} ",
+          "properties": {
+            "discharging_icon": "",
+            "not_charging_icon": "",
+            "charging_icon": "󰂄",
+            "charged_icon": "󰚥"
+          }
+        },
+        {
+          "type": "executiontime",
+          "style": "plain",
+          "foreground": "#8800dd",
+          "template": " <#fefefe>󰚭</>{{ .FormattedMs }} ",
+          "properties": {
+            "threshold": 500,
+            "style": "austin"
+          }
+        },
+        {
+          "type": "project",
+          "style": "plain",
+          "foreground": "#ffeb3b",
+          "template": "{{ if .Error }}{{ .Error }}{{ else if .Name }}{{ .Name }}{{ end }} "
+        },
+        {
+          "type": "git",
+          "style": "plain",
+          "foreground": "#193549",
+          "template": "{{ if .Env.POSH_GIT_STRING }}{{ .Env.POSH_GIT_STRING }}{{ else }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ end }} "
+        },
+        {
+          "type": "gitversion",
+          "style": "plain",
+          "foreground": "#3a579b",
+          "template": " {{ .MajorMinorPatch }} "
+        },
+        {
+          "type": "nbgv",
+          "style": "plain",
+          "foreground": "#3a579a",
+          "template": " {{ .Version }} "
+        },
+        {
+          "type": "status",
+          "style": "plain",
+          "template": "{{ if .Error }}<#e91e63>{{ .Code }}</>{{end}}",
+          "properties": {
+            "always_enabled": true
+          }
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "type": "dotnet",
+          "style": "plain",
+          "foreground": "#5030e1",
+          "template": "󰪮 {{ .Full }} "
+        },
+        {
+          "type": "rust",
+          "style": "plain",
+          "foreground": "#99908a",
+          "template": " {{ .Full }} "
+        },
+        {
+          "type": "dart",
+          "style": "plain",
+          "foreground": "#06A4CE",
+          "template": " {{ .Full }} "
+        },
+        {
+          "type": "node",
+          "style": "plain",
+          "foreground": "#6CA35E",
+          "template": " {{ .Full }} "
+        },
+        {
+          "type": "npm",
+          "style": "plain",
+          "foreground": "#ffeb3b",
+          "template": " {{ .Full }} "
+        },
+        {
+          "type": "pnpm",
+          "style": "plain",
+          "foreground": "#F9AD00",
+          "template": "󰋁 {{ .Full }} "
+        },
+        {
+          "type": "yarn",
+          "style": "plain",
+          "foreground": "#2E2A65",
+          "template": "󰄛 {{ .Full }} "
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "path",
+          "style": "plain",
+          "foreground": "#91ddff",
+          "properties": {
+            "style": "full",
+            "folder_separator_icon": "<#7f7f7f>\\</>",
+            "home_icon": "󰋜",
+            "mapped_locations": {
+              "\\\\wsl.localhost": "",
+              "\\\\wsl.localhost\\Ubuntu": "",
+              "\\\\wsl.localhost\\Ubuntu/home/shimakaze": "/󰋜",
+              "D:\\Shimakaze\\Desktop": "",
+              "D:\\Shimakaze\\Downloads": "󰇚",
+              "D:\\Shimakaze\\source\\repos": "",
+              "C:": ":",
+              "E:": ":",
+              "Microsoft.PowerShell.Core": "",
+              "Microsoft.PowerShell.Core\\FileSystem::C:": ":",
+              "Microsoft.PowerShell.Core\\FileSystem::D:": "D:",
+              "Microsoft.PowerShell.Core\\FileSystem::E:": ":",
+              "Microsoft.PowerShell.Core\\FileSystem::F:": "F:",
+              "Microsoft.PowerShell.Core\\FileSystem::G:": "G:",
+              "Microsoft.PowerShell.Core\\FileSystem::H:": "H:",
+              "Microsoft.PowerShell.Core\\FileSystem::I:": "I:",
+              "Microsoft.PowerShell.Core\\FileSystem::J:": "J:",
+              "Microsoft.PowerShell.Core\\FileSystem::K:": "K:",
+              "Microsoft.PowerShell.Core\\FileSystem::L:": "L:",
+              "Microsoft.PowerShell.Core\\FileSystem::M:": "M:",
+              "Microsoft.PowerShell.Core\\FileSystem::N:": "N:",
+              "Microsoft.PowerShell.Core\\FileSystem::O:": "O:",
+              "Microsoft.PowerShell.Core\\FileSystem::P:": "P:",
+              "Microsoft.PowerShell.Core\\FileSystem::Q:": "Q:",
+              "Microsoft.PowerShell.Core\\FileSystem::R:": "R:",
+              "Microsoft.PowerShell.Core\\FileSystem::S:": "S:",
+              "Microsoft.PowerShell.Core\\FileSystem::T:": "T:",
+              "Microsoft.PowerShell.Core\\FileSystem::U:": "U:",
+              "Microsoft.PowerShell.Core\\FileSystem::V:": "V:",
+              "Microsoft.PowerShell.Core\\FileSystem::W:": "W:",
+              "Microsoft.PowerShell.Core\\FileSystem::X:": "X:",
+              "Microsoft.PowerShell.Core\\FileSystem::Y:": "Y:",
+              "Microsoft.PowerShell.Core\\FileSystem::Z:": "Z:"
+            }
+          },
+          "template": "{{ .Path }}<#7f7f7f></>"
+        }
+      ]
+    }
+  ],
+  "final_space": true,
+  "version": 2
+}
