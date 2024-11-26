@@ -6,103 +6,103 @@
       "alignment": "left",
       "segments": [
         {
-          "type": "time",
-          "style": "plain",
-          "foreground": "#00ff00",
           "properties": {
             "time_format": "[15:04:05]"
           },
-          "template": "{{ .CurrentDate | date .Format }} "
+          "style": "plain",
+          "template": "{{ .CurrentDate | date .Format }} ",
+          "foreground": "#00ff00",
+          "type": "time"
         },
         {
-          "type": "session",
           "style": "plain",
+          "template": "{{ if .SSHSession }}\udb82\udcc0{{ end }}{{ .UserName }}@{{ .HostName }} ",
           "foreground": "#c386f1",
-          "template": "{{ if .SSHSession }}󰣀{{ end }}{{ .UserName }}@{{ .HostName }} "
+          "type": "session"
         },
         {
-          "type": "root",
           "style": "plain",
+          "template": "\uf4df ",
           "foreground": "#ffff66",
-          "template": " "
+          "type": "root"
         },
         {
-          "type": "os",
           "style": "plain",
+          "template": "{{ if .WSL }}\ue712 in {{ end }}{{.Icon}} ",
           "foreground": "#26C6DA",
-          "template": "{{ if .WSL }} in {{ end }}{{.Icon}} "
+          "type": "os"
         },
         {
-          "type": "shell",
-          "style": "plain",
-          "foreground": "#0077c2",
-          "template": "{{ .Name }}{{ .Version }} ",
           "properties": {
             "mapped_shell_names": {
-              "pwsh": "󰨊",
-              "dotnet": "󰨊󰪮",
-              "powershell": "󰨊"
+              "dotnet": "\udb82\ude0a\udb82\udeae",
+              "powershell": "\udb82\ude0a\ue70f",
+              "pwsh": "\udb82\ude0a"
             }
-          }
+          },
+          "style": "plain",
+          "template": "{{ .Name }}{{ .Version }} ",
+          "foreground": "#0077c2",
+          "type": "shell"
         },
         {
-          "type": "battery",
+          "properties": {
+            "charged_icon": "\udb81\udea5",
+            "charging_icon": "\udb80\udc84",
+            "discharging_icon": "",
+            "not_charging_icon": ""
+          },
           "style": "plain",
+          "template": "{{ if not .Error }}{{ .Percentage }}\uf295{{ if eq .Percentage 100 }}\udb80\udc79{{ else if ge .Percentage 90 }}\udb80\udc82{{ else if ge .Percentage 80 }}\udb80\udc81{{ else if ge .Percentage 70 }}\udb80\udc80{{ else if ge .Percentage 60 }}\udb80\udc7f{{ else if ge .Percentage 50 }}\udb80\udc7e{{ else if ge .Percentage 40 }}\udb80\udc7d{{ else if ge .Percentage 30 }}\udb80\udc7c{{ else if ge .Percentage 20 }}\udb80\udc7b{{ else if ge .Percentage 10 }}\udb80\udc7a{{ else if ge .Percentage 5 }}\udb80\udc8e{{ else if ge .Percentage 0 }}\udb80\udc8e{{ end }}{{ .Icon }}{{ end }} ",
           "foreground": "#ffeb3b",
+          "type": "battery",
           "foreground_templates": [
             "{{if eq \"Charging\" .State.String}}#40c4ff{{end}}",
             "{{if eq \"Discharging\" .State.String}}#ff5722{{end}}",
             "{{if eq \"Full\" .State.String}}#4caf50{{end}}"
-          ],
-          "template": "{{ if not .Error }}{{ .Percentage }}{{ if eq .Percentage 100 }}󰁹{{ else if ge .Percentage 90 }}󰂂{{ else if ge .Percentage 80 }}󰂁{{ else if ge .Percentage 70 }}󰂀{{ else if ge .Percentage 60 }}󰁿{{ else if ge .Percentage 50 }}󰁾{{ else if ge .Percentage 40 }}󰁽{{ else if ge .Percentage 30 }}󰁼{{ else if ge .Percentage 20 }}󰁻{{ else if ge .Percentage 10 }}󰁺{{ else if ge .Percentage 5 }}󰂎{{ else if ge .Percentage 0 }}󰂎{{ end }}{{ .Icon }}{{ end }} ",
-          "properties": {
-            "discharging_icon": "",
-            "not_charging_icon": "",
-            "charging_icon": "󰂄",
-            "charged_icon": "󰚥"
-          }
+          ]
         },
         {
-          "type": "executiontime",
+          "properties": {
+            "style": "austin",
+            "threshold": 500
+          },
           "style": "plain",
+          "template": " <#fefefe>\udb81\udead</>{{ .FormattedMs }} ",
           "foreground": "#8800dd",
-          "template": " <#fefefe>󰚭</>{{ .FormattedMs }} ",
-          "properties": {
-            "threshold": 500,
-            "style": "austin"
-          }
+          "type": "executiontime"
         },
         {
-          "type": "project",
           "style": "plain",
+          "template": "{{ if .Error }}{{ .Error }}{{ else if .Name }}{{ .Name }}{{ end }} ",
           "foreground": "#ffeb3b",
-          "template": "{{ if .Error }}{{ .Error }}{{ else if .Name }}{{ .Name }}{{ end }} "
+          "type": "project"
         },
         {
-          "type": "git",
           "style": "plain",
+          "template": "{{ if .Env.POSH_GIT_STRING }}\uf1d3{{ .Env.POSH_GIT_STRING }}{{ else }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ end }} ",
           "foreground": "#193549",
-          "template": "{{ if .Env.POSH_GIT_STRING }}{{ .Env.POSH_GIT_STRING }}{{ else }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }}  {{ .Working.String }}{{ end }}{{ if and (.Staging.Changed) (.Working.Changed) }} |{{ end }}{{ if .Staging.Changed }}  {{ .Staging.String }}{{ end }}{{ end }} "
+          "type": "git"
         },
         {
-          "type": "gitversion",
           "style": "plain",
+          "template": "\uf1d2 {{ .MajorMinorPatch }} ",
           "foreground": "#3a579b",
-          "template": " {{ .MajorMinorPatch }} "
+          "type": "gitversion"
         },
         {
-          "type": "nbgv",
           "style": "plain",
+          "template": "\uf1d2 {{ .Version }} ",
           "foreground": "#3a579a",
-          "template": " {{ .Version }} "
+          "type": "nbgv"
         },
         {
-          "type": "status",
-          "style": "plain",
-          "template": "{{ if .Error }}<#e91e63>{{ .Code }}</>{{end}}",
           "properties": {
             "always_enabled": true
-          }
+          },
+          "style": "plain",
+          "template": "{{ if .Error }}<#e91e63>\ue654{{ .Code }}</>{{end}}",
+          "type": "status"
         }
       ]
     },
@@ -111,103 +111,103 @@
       "alignment": "right",
       "segments": [
         {
-          "type": "dotnet",
           "style": "plain",
+          "template": "\udb82\udeae {{ .Full }} ",
           "foreground": "#5030e1",
-          "template": "󰪮 {{ .Full }} "
+          "type": "dotnet"
         },
         {
-          "type": "rust",
           "style": "plain",
+          "template": "\ue7a8 {{ .Full }} ",
           "foreground": "#99908a",
-          "template": " {{ .Full }} "
+          "type": "rust"
         },
         {
-          "type": "dart",
           "style": "plain",
+          "template": "\ue798 {{ .Full }} ",
           "foreground": "#06A4CE",
-          "template": " {{ .Full }} "
+          "type": "dart"
         },
         {
-          "type": "node",
           "style": "plain",
+          "template": "\ue718 {{ .Full }} ",
           "foreground": "#6CA35E",
-          "template": " {{ .Full }} "
+          "type": "node"
         },
         {
-          "type": "npm",
           "style": "plain",
+          "template": "\ue71e {{ .Full }} ",
           "foreground": "#ffeb3b",
-          "template": " {{ .Full }} "
+          "type": "npm"
         },
         {
-          "type": "pnpm",
           "style": "plain",
+          "template": "\udb80\udec1 {{ .Full }} ",
           "foreground": "#F9AD00",
-          "template": "󰋁 {{ .Full }} "
+          "type": "pnpm"
         },
         {
-          "type": "yarn",
           "style": "plain",
+          "template": "\udb80\udd1b {{ .Full }} ",
           "foreground": "#2E2A65",
-          "template": "󰄛 {{ .Full }} "
+          "type": "yarn"
         }
       ]
     },
     {
       "type": "prompt",
       "alignment": "left",
-      "newline": true,
       "segments": [
         {
-          "type": "path",
-          "style": "plain",
-          "foreground": "#91ddff",
           "properties": {
-            "style": "full",
             "folder_separator_icon": "<#7f7f7f>\\</>",
-            "home_icon": "󰋜",
+            "home_icon": "\udb80\udedc",
             "mapped_locations": {
-              "\\\\wsl.localhost": "",
-              "\\\\wsl.localhost\\Ubuntu": "",
-              "\\\\wsl.localhost\\Ubuntu/home/shimakaze": "/󰋜",
-              "D:\\Shimakaze\\Desktop": "",
-              "D:\\Shimakaze\\Downloads": "󰇚",
-              "D:\\Shimakaze\\source\\repos": "",
-              "C:": ":",
-              "E:": ":",
-              "Microsoft.PowerShell.Core": "",
-              "Microsoft.PowerShell.Core\\FileSystem::C:": ":",
-              "Microsoft.PowerShell.Core\\FileSystem::D:": "D:",
-              "Microsoft.PowerShell.Core\\FileSystem::E:": ":",
-              "Microsoft.PowerShell.Core\\FileSystem::F:": "F:",
-              "Microsoft.PowerShell.Core\\FileSystem::G:": "G:",
-              "Microsoft.PowerShell.Core\\FileSystem::H:": "H:",
-              "Microsoft.PowerShell.Core\\FileSystem::I:": "I:",
-              "Microsoft.PowerShell.Core\\FileSystem::J:": "J:",
-              "Microsoft.PowerShell.Core\\FileSystem::K:": "K:",
-              "Microsoft.PowerShell.Core\\FileSystem::L:": "L:",
-              "Microsoft.PowerShell.Core\\FileSystem::M:": "M:",
-              "Microsoft.PowerShell.Core\\FileSystem::N:": "N:",
-              "Microsoft.PowerShell.Core\\FileSystem::O:": "O:",
-              "Microsoft.PowerShell.Core\\FileSystem::P:": "P:",
-              "Microsoft.PowerShell.Core\\FileSystem::Q:": "Q:",
-              "Microsoft.PowerShell.Core\\FileSystem::R:": "R:",
-              "Microsoft.PowerShell.Core\\FileSystem::S:": "S:",
-              "Microsoft.PowerShell.Core\\FileSystem::T:": "T:",
-              "Microsoft.PowerShell.Core\\FileSystem::U:": "U:",
-              "Microsoft.PowerShell.Core\\FileSystem::V:": "V:",
-              "Microsoft.PowerShell.Core\\FileSystem::W:": "W:",
-              "Microsoft.PowerShell.Core\\FileSystem::X:": "X:",
-              "Microsoft.PowerShell.Core\\FileSystem::Y:": "Y:",
-              "Microsoft.PowerShell.Core\\FileSystem::Z:": "Z:"
-            }
+              "C:": "\ue62a:",
+              "D:\\Shimakaze\\Desktop": "\uf108",
+              "D:\\Shimakaze\\Downloads": "\udb80\uddda",
+              "D:\\Shimakaze\\source\\repos": "\ue5fd",
+              "E:": "\ue5fd:",
+              "Microsoft.PowerShell.Core": "\ue683",
+              "Microsoft.PowerShell.Core\\FileSystem::C:": "\ue683\ue62a:",
+              "Microsoft.PowerShell.Core\\FileSystem::D:": "\ue683D:",
+              "Microsoft.PowerShell.Core\\FileSystem::E:": "\ue683\ue5fd:",
+              "Microsoft.PowerShell.Core\\FileSystem::F:": "\ue683F:",
+              "Microsoft.PowerShell.Core\\FileSystem::G:": "\ue683G:",
+              "Microsoft.PowerShell.Core\\FileSystem::H:": "\ue683H:",
+              "Microsoft.PowerShell.Core\\FileSystem::I:": "\ue683I:",
+              "Microsoft.PowerShell.Core\\FileSystem::J:": "\ue683J:",
+              "Microsoft.PowerShell.Core\\FileSystem::K:": "\ue683K:",
+              "Microsoft.PowerShell.Core\\FileSystem::L:": "\ue683L:",
+              "Microsoft.PowerShell.Core\\FileSystem::M:": "\ue683M:",
+              "Microsoft.PowerShell.Core\\FileSystem::N:": "\ue683N:",
+              "Microsoft.PowerShell.Core\\FileSystem::O:": "\ue683O:",
+              "Microsoft.PowerShell.Core\\FileSystem::P:": "\ue683P:",
+              "Microsoft.PowerShell.Core\\FileSystem::Q:": "\ue683Q:",
+              "Microsoft.PowerShell.Core\\FileSystem::R:": "\ue683R:",
+              "Microsoft.PowerShell.Core\\FileSystem::S:": "\ue683S:",
+              "Microsoft.PowerShell.Core\\FileSystem::T:": "\ue683T:",
+              "Microsoft.PowerShell.Core\\FileSystem::U:": "\ue683U:",
+              "Microsoft.PowerShell.Core\\FileSystem::V:": "\ue683V:",
+              "Microsoft.PowerShell.Core\\FileSystem::W:": "\ue683W:",
+              "Microsoft.PowerShell.Core\\FileSystem::X:": "\ue683X:",
+              "Microsoft.PowerShell.Core\\FileSystem::Y:": "\ue683Y:",
+              "Microsoft.PowerShell.Core\\FileSystem::Z:": "\ue683Z:",
+              "\\\\wsl.localhost": "\uf17c",
+              "\\\\wsl.localhost\\Ubuntu": "\uf31c",
+              "\\\\wsl.localhost\\Ubuntu/home/shimakaze": "\uf31c/\udb80\udedc"
+            },
+            "style": "full"
           },
-          "template": "{{ .Path }}<#7f7f7f></>"
+          "style": "plain",
+          "template": "{{ .Path }}<#7f7f7f>\ue0b1</>",
+          "foreground": "#91ddff",
+          "type": "path"
         }
-      ]
+      ],
+      "newline": true
     }
   ],
-  "final_space": true,
-  "version": 2
+  "version": 3,
+  "final_space": true
 }
