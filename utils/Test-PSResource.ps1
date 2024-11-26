@@ -19,7 +19,7 @@ function Test-InstalledPSResource {
   process {
     $Private:Result = $Global:PSResources | Where-Object Name -EQ $Name
 
-    return $Private:Result -ne $null   
+    return $null -ne $Private:Result   
   }
 }
 function Install-PSResourceAndImport {
@@ -35,6 +35,7 @@ function Install-PSResourceAndImport {
     if (!$Private:Result) {
       Install-PSResource -Name $Name -Repository PSGallery -TrustRepository
     }
-    Import-Module -Name CompletionPredictor
+
+    Import-Module -Name $Name
   }
 }

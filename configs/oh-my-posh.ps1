@@ -8,7 +8,8 @@ $Private:ConfigPath = Join-Path $PSScriptRoot '..' '.shimakaze.omp.json'
 if (Test-Path -LiteralPath $Private:ConfigPath) {
   if ($PSVersionTable.Platform -eq 'Win32NT') {
     where.exe /Q oh-my-posh
-  } else {
+  }
+  else {
     # TODO: 其他操作系统的检测方法
   }
   if ($LASTEXITCODE -eq 0) {
