@@ -5,7 +5,11 @@ function New-DotnetProject {
   param (
     [Parameter(Mandatory)]
     [string]
-    $SdkVersion
+    $SdkVersion,
+    [switch]
+    $Slnx,
+    [switch]
+    $BuildTargets
   )
   
   process {
@@ -15,9 +19,16 @@ function New-DotnetProject {
     dotnet new gitignore
     dotnet new editorconfig
     dotnet new buildprops
-    dotnet new buildtargets
+    if ($BuildTargets) {
+      dotnet new buildtargets
+    }
     dotnet new packagesprops
-    dotnet new sln
+    if ($Slnx) {
+      dotnet new slnx
+    }
+    else {
+      dotnet new sln
+    }
     dotnet new globaljson --roll-forward major --sdk-version $SdkVersion
     git init .
     git add .
