@@ -11,9 +11,9 @@ if (Test-Path -LiteralPath $Private:UtilsPath) {
 }
 
 # Predictors
-Set-PSReadLineOption -PredictionSource HistoryAndPlugin
 Install-PSResourceAndImport -Name CompletionPredictor
 Install-PSResourceAndImport -Name Sixel
+Set-PSReadLineOption -PredictionSource HistoryAndPlugin -PredictionViewStyle ListView
 
 # Import Configurations
 $Private:ConfigurationsPath = Join-Path $PSScriptRoot 'configs'

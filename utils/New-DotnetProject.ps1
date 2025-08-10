@@ -24,12 +24,12 @@ function New-DotnetProject {
     }
     dotnet new packagesprops
     if ($Slnx) {
-      dotnet new slnx
+      dotnet new sln --format slnx
     }
     else {
       dotnet new sln
     }
-    dotnet new globaljson --roll-forward major --sdk-version $SdkVersion
+    dotnet new globaljson --roll-forward latestMajor --sdk-version $SdkVersion
     git init .
     git add .
     git commit -m ':tada: Initialize'
