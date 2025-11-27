@@ -32,8 +32,13 @@ $ExecutionContext.InvokeCommand.CommandNotFoundAction = {
   )
 
   process {
-    if ($e.CommandName.StartsWith('..')) {
+    if ($e.CommandName -match '^\.\.+$') {
       $e.CommandScriptBlock = { Set-LocationQuick -QuickPath $e.CommandName }.GetNewClosure()
+      return
+    }
+
+    if ([System.IO.Directory]::Exists($e.CommandName)) {
+      $e.CommandScriptBlock = { Set-Location -Path $e.CommandName }.GetNewClosure()
       return
     }
   }
