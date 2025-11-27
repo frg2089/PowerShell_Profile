@@ -22,3 +22,19 @@ if (Test-Path -LiteralPath $Private:ConfigurationsPath) {
   | Where-Object Extension -EQ '.ps1' `
   | ForEach-Object { . $PSItem }
 }
+
+$ExecutionContext.InvokeCommand.CommandNotFoundAction = {
+  param(
+    [string]
+    $o,
+    [System.Management.Automation.CommandLookupEventArgs]
+    $e
+  )
+
+  process {
+    if ($e.CommandName.StartsWith('..')) {
+      $e.CommandScriptBlock = { Set-LocationQuick -QuickPath $e.CommandName }.GetNewClosure()
+      return
+    }
+  }
+}
