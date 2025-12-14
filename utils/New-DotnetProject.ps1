@@ -47,35 +47,72 @@ function Add-DotnetProjects {
 function New-DotnetProject {
   [CmdletBinding()]
   param (
-    [Parameter(Mandatory)]
     [string]
     $SdkVersion,
     [switch]
-    $Slnx,
+    $Sln,
     [switch]
-    $BuildTargets
+    $NoMIT,
+    [switch]
+    $NoGitIgnore,
+    [switch]
+    $NoGitAttributes,
+    [switch]
+    $NoNugetConfig,
+    [switch]
+    $NoEditorConfig,
+    [switch]
+    $NoBuildProps,
+    [switch]
+    $NoBuildTargets,
+    [switch]
+    $NoCPM,
+    [switch]
+    $NoSln,
+    [switch]
+    $NoGit
   )
   
   process {
     New-Item -ItemType 'Directory' -Name 'src'
-    Invoke-WebRequest -Uri https://frg2089.mit-license.org/license.txt -OutFile LICENSE
-    dotnet new nugetconfig
-    dotnet new gitignore
-    dotnet new editorconfig
-    dotnet new buildprops
-    if ($BuildTargets) {
+    if (-not $NoMIT) {
+      Invoke-WebRequest -Uri https://frg2089.mit-license.org/license.txt -OutFile LICENSE
+    }
+    if (-not $NoGitIgnore) {
+      dotnet new .gitignore
+    }
+    if (-not $NoGitAttributes) {
+      dotnet new .gitattributes
+    }
+    if (-not $NoNugetConfig) {
+      dotnet new nuget.config
+    }
+    if (-not $NoEditorConfig) {
+      dotnet new .editorconfig
+    }
+    if (-not $NoBuildProps) {
+      dotnet new buildprops
+    }
+    if (-not $NoBuildTargets) {
       dotnet new buildtargets
     }
-    dotnet new packagesprops
-    if ($Slnx) {
-      dotnet new sln --format slnx
+    if (-not $NoCPM) {
+      dotnet new packagesprops
     }
-    else {
-      dotnet new sln
+    if (-not $NoSln) {
+      if ($Sln) {
+        dotnet new sln
+      }
+      else {
+        dotnet new sln --format slnx
+      }
     }
-    dotnet new globaljson --roll-forward latestMajor --sdk-version $SdkVersion
-    git init .
-    git add .
-    git commit -m ':tada: Initialize'
+    if (-not [string]::IsNullOrWhiteSpace($SdkVersion)) {
+      dotnet new globaljson --roll-forward latestFeature --sdk-version $SdkVersion
+    }
+    if (-not $NoGit) {
+      git init .
+      git add .
+    }
   }
 }
