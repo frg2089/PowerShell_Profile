@@ -72,33 +72,10 @@ function New-DotnetProject {
     [switch]
     $NoGit
   )
-  
+
   process {
-    New-Item -ItemType 'Directory' -Name 'src'
-    if (-not $NoMIT) {
-      Invoke-WebRequest -Uri https://frg2089.mit-license.org/license.txt -OutFile LICENSE
-    }
-    if (-not $NoGitIgnore) {
-      dotnet new .gitignore
-    }
-    if (-not $NoGitAttributes) {
-      dotnet new .gitattributes
-    }
-    if (-not $NoNugetConfig) {
-      dotnet new nuget.config
-    }
-    if (-not $NoEditorConfig) {
-      dotnet new .editorconfig
-    }
-    if (-not $NoBuildProps) {
-      dotnet new buildprops
-    }
-    if (-not $NoBuildTargets) {
-      dotnet new buildtargets
-    }
-    if (-not $NoCPM) {
-      dotnet new packagesprops
-    }
+    $Private:Slnp = Get-Command dotnet-slnp -ErrorAction SilentlyContinue
+
     if (-not $NoSln) {
       if ($Sln) {
         dotnet new sln
@@ -107,8 +84,60 @@ function New-DotnetProject {
         dotnet new sln --format slnx
       }
     }
+    New-Item -ItemType 'Directory' -Name 'src'
+    if (-not $NoMIT) {
+      Invoke-WebRequest -Uri https://frg2089.mit-license.org/license.txt -OutFile LICENSE
+      if ($Private:Slnp) {
+        dotnet slnp add LICENSE
+      }
+    }
+    if (-not $NoGitIgnore) {
+      dotnet new .gitignore
+      if ($Private:Slnp) {
+        dotnet slnp add .gitignore
+      }
+    }
+    if (-not $NoGitAttributes) {
+      dotnet new .gitattributes
+      if ($Private:Slnp) {
+        dotnet slnp add .gitattributes
+      }
+    }
+    if (-not $NoNugetConfig) {
+      dotnet new nuget.config
+      if ($Private:Slnp) {
+        dotnet slnp add nuget.config
+      }
+    }
+    if (-not $NoEditorConfig) {
+      dotnet new .editorconfig
+      if ($Private:Slnp) {
+        dotnet slnp add .editorconfig
+      }
+    }
+    if (-not $NoBuildProps) {
+      dotnet new buildprops
+      if ($Private:Slnp) {
+        dotnet slnp add buildprops
+      }
+    }
+    if (-not $NoBuildTargets) {
+      dotnet new buildtargets
+      if ($Private:Slnp) {
+        dotnet slnp add buildtargets
+      }
+    }
+    if (-not $NoCPM) {
+      dotnet new packagesprops
+      if ($Private:Slnp) {
+        dotnet slnp add packagesprops
+      }
+    }
     if (-not [string]::IsNullOrWhiteSpace($SdkVersion)) {
       dotnet new globaljson --roll-forward latestFeature --sdk-version $SdkVersion
+      if ($Private:Slnp) {
+        dotnet slnp add globaljson
+      }
     }
     if (-not $NoGit) {
       git init .
