@@ -1,46 +1,87 @@
 #Requires -Version 7.4
 
+if (!$SolutionExtensions) {
+  New-Variable -Name 'SolutionExtensions' -Value @('.slnx', '.sln') -Scope Script
+}
+
+function Find-Solution {
+  param (
+    [Parameter()]
+    [string]
+    $Path
+  )
+  if (!$Path) {
+    $Path = Get-Location
+  }
+
+  $Path = Resolve-Path -LiteralPath $Path
+  
+  $Private:List = Get-ChildItem -LiteralPath $Path -File | Where-Object Extension -In $Script:SolutionExtensions 
+  if ($Private:List -is [System.IO.FileInfo]) {
+    return $Private:List
+  }
+  elseif ($Private:List.Length -gt 1) {
+    Write-Error -Message 'Multiple solutions found. see $Error[0].TargetObject' -TargetObject $Private:List
+  }
+
+  $Private:Parent = Split-Path -LiteralPath $Path
+  if ($Private:Parent) {
+    return Find-Solution -Path $Private:Parent
+  }
+}
+
+<#
+.DESCRIPTION
+  Append Projects into Solution.
+#>
 function Add-DotnetProjects {
   [CmdletBinding()]
   param (
+    [Parameter()]
     [string]
     $Solution,
+    [Parameter()]
     [string]
     $ProjectsDirectory,
+    [Parameter()]
+    [string]
+    $SolutionFolder,
+    [Parameter()]
     [switch]
-    $NoRoot
+    $Workspace
   )
-  $Private:CommandArgs = '--in-root'
-  if ($NoRoot) {
-    $Private:CommandArgs = ''
-  }
-
-  function Find-Solution ([string]$Path) {
-    $Solution = Get-ChildItem -Path $Path -Filter '*.slnx' | Select-Object -First 1
-    if (!$Solution) {
-      $Solution = Get-ChildItem -Path $Path -Filter '*.sln' | Select-Object -First 1
-    }
-
-    return $Solution
+  if (!$Solution) {
+    $Solution = Find-Solution
   }
   if (!$Solution) {
-    $Solution = Find-Solution -Path (Get-Location)
-    if (!$Solution) {
-      $Solution = Find-Solution -Path (Split-Path -Path (Get-Location))
-    }
+    throw 'Solution not found.'
   }
 
-  $Private:SolutionDirectory = Split-Path -Path $Solution
+  $Private:SolutionDirectory = Split-Path -LiteralPath $Solution
 
-  if (!$ProjectsDirectory) {
-    $ProjectsDirectory = Get-ChildItem -Directory -Path $Private:SolutionDirectory | Where-Object Name -EQ 'src' | Select-Object -First 1
+  if ($Workspace) {
+    if (!$ProjectsDirectory) {
+      $ProjectsDirectory = Get-ChildItem -LiteralPath $Private:SolutionDirectory | Where-Object Name -EQ 'src' | Select-Object -First 1
+    }
     if (!$ProjectsDirectory) {
       $ProjectsDirectory = $Private:SolutionDirectory
     }
   }
+  if (!$ProjectsDirectory) {
+    $ProjectsDirectory = Get-Location
+  }
+
+  $Private:CommandArgs = @()
+  if ($SolutionFolder) {
+    $Private:CommandArgs += '--solution-folder'
+    $Private:CommandArgs += $SolutionFolder
+  }
+  else {
+    $Private:CommandArgs += '--in-root'
+  }
 
   Get-ChildItem -Path $ProjectsDirectory | ForEach-Object { 
-    dotnet sln $Solution add $_.FullName $Private:CommandArgs
+    dotnet sln $Solution add $PSItem.FullName $Private:CommandArgs
   }
 }
 
