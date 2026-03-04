@@ -159,25 +159,25 @@ function New-DotnetProject {
     if (-not $NoBuildProps) {
       dotnet new buildprops
       if ($Private:Slnp) {
-        dotnet slnp add buildprops
+        dotnet slnp add Directory.Build.props
       }
     }
     if (-not $NoBuildTargets) {
       dotnet new buildtargets
       if ($Private:Slnp) {
-        dotnet slnp add buildtargets
+        dotnet slnp add Directory.Build.targets
       }
     }
     if (-not $NoCPM) {
       dotnet new packagesprops
       if ($Private:Slnp) {
-        dotnet slnp add packagesprops
+        dotnet slnp add Directory.Packages.props
       }
     }
     if (-not [string]::IsNullOrWhiteSpace($SdkVersion)) {
-      dotnet new globaljson --roll-forward latestFeature --sdk-version $SdkVersion
+      dotnet new global.json --roll-forward latestFeature --sdk-version $SdkVersion
       if ($Private:Slnp) {
-        dotnet slnp add globaljson
+        dotnet slnp add global.json
       }
     }
     if (-not $NoGit) {
