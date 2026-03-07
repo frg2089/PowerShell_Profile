@@ -60,16 +60,12 @@ function Add-DotnetProjects {
   $Private:SolutionDirectory = Split-Path -LiteralPath $Solution
 
   if ($Workspace) {
-    if (!$ProjectsDirectory) {
-      $ProjectsDirectory = Get-ChildItem -LiteralPath $Private:SolutionDirectory | Where-Object Name -EQ 'src' | Select-Object -First 1
-    }
-    if (!$ProjectsDirectory) {
-      $ProjectsDirectory = $Private:SolutionDirectory
-    }
+    $ProjectsDirectory ??= Get-ChildItem -LiteralPath (Join-Path $Private:SolutionDirectory 'src') -ErrorAction SilentlyContinue
+    $ProjectsDirectory ??= $Private:SolutionDirectory
   }
-  if (!$ProjectsDirectory) {
-    $ProjectsDirectory = Get-Location
-  }
+
+  $ProjectsDirectory ??= Get-ChildItem -LiteralPath 'src' -ErrorAction SilentlyContinue
+  $ProjectsDirectory ??= Get-Location
 
   $Private:CommandArgs = @()
   if ($SolutionFolder) {
